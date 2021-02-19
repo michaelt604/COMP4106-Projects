@@ -7,7 +7,7 @@ from io import StringIO
 
 from queue import PriorityQueue
 
-
+goalStatePath = {} #global variable
 class Edge:
     def __init__(self, n1, n2, cost):
         self.n1 = n1
@@ -141,7 +141,7 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
     for index in range(len(g.G)):
         gNode = g.nodes[g.G[index].xy[1], g.G[index].xy[0]] #Physical goal node
     #^^^make sure the bottom code is nested within this for loop 
-
+        print("Goal Node" + str(gNode.xy))
         while (not pq.empty()):   
             lowest = pq.get()   #Get lowest code node
 
@@ -152,7 +152,9 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
             neighbours = lowest.edges  #Nearby edges
 
             if (lowest.xy == gNode.xy):   #Reached end node     
-                print("REACHED END NODE")  
+                print("REACHED END NODE")
+                #declare new function here  
+                pathcost(gNode, sNode)
                 break
 
             for i in range(len(neighbours)):    #neighbours[i].n2 is the current node we're checking         
@@ -172,11 +174,11 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
                     print("\t\tUpdating Cost From " + str(neighbours[i].n2.nCost) + " to " + str(nodeCost))
         
         print("done")
-    
-    pathCost(currentNode, startNode):
 
+'''
     finishedList = [gNode.xy]
     cost = 0
+
 
     curNode = g.nodes[gNode.xy[0], gNode.xy[1]]
     while(curNode.xy != sNode.xy):
@@ -195,12 +197,37 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
     minPathCostKey = min(goalStatePath.keys())
     print("Minimum path cost KEY = " + str(minPathCostKey))
     print("Minimum path cost VALUE = " + str(goalStatePath[minPathCostKey]))
-
+'''
+    minPathCostKey = min(goalStatePath.keys())
+    print("Minimum path cost KEY = " + str(minPathCostKey))
+    print("Minimum path cost VALUE = " + str(goalStatePath[minPathCostKey]))
     optimalPathCost = 0
 
     return optimalPathCost
 
+def pathCost(gNode, sNode):
 
+    finishedList = [gNode.xy]
+    cost = 0
+
+    curNode = g.nodes[gNode.xy[0], gNode.xy[1]]
+    while(curNode.xy != sNode.xy):
+        curNode = curNode.prev
+        finishedList.append(curNode.xy)
+        print("before Cost = " + str(cost))
+        cost += curNode.nCost
+        print("after Cost = " + str(cost))
+
+    finishedList.reverse()
+    print("Order = " + str(finishedList))
+    print("Cost = " + str(cost))
+    goalStatePath[cost] = finishedList #add to the dictionary, key: cost, value: finishedList
+
+'''
+    minPathCostKey = min(goalStatePath.keys())
+    print("Minimum path cost KEY = " + str(minPathCostKey))
+    print("Minimum path cost VALUE = " + str(goalStatePath[minPathCostKey]))
+'''
 def main():
     cost = pathfinding("a", "a", "a")
 
