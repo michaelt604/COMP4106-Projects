@@ -47,7 +47,10 @@ class Graph:
         #self.G = (0, 0)
         self.G = []
 
-        self.createGraph(self.xCount, self.yCount, grid)  #Create our graph
+        #self.createGraph(self.xCount, self.yCount, grid)  #Create our graph
+        print("Graph x:" + str(self.xCount ))
+        print("Graph y:"+ str(self.yCount))
+        self.createGraph(self.xCount, self.yCount, grid)
     
     def getWeight(self, n):
         if (n.id == "X"):    #Empty node
@@ -76,7 +79,9 @@ class Graph:
             for i in range(yCount):
                 #print(grid[j, i])  print node at time
                 newNode = Node((i, j), grid[i, j])
-                self.nodes[j, i] = newNode
+                self.nodes[i, j] = newNode
+        print("xCount:" + str(xCount) )
+        print("yCount:"+ str(yCount))
         
         for i in range(xCount):   #Create all our edges
             for j in range(yCount):   
@@ -106,7 +111,7 @@ class Graph:
 # exploredListFilename is the name of the file the list of explored nodes should be written to
 def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
     #Import CSV
-    csv = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment1/Example2/rectangle.csv", delimiter=",", dtype="str")
+    csv = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment1/Example1/input.csv", delimiter=",", dtype="str")
     csv = np.char.strip(csv)
 
     print(csv)
@@ -175,7 +180,6 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
         print("done")
         pathCost(gNode, sNode,g, index)
 
-    print("Dictionary items " + str(goalStatePath.keys()))
     minPathCostKey = min(goalStatePath.keys())
     print("Minimum path cost KEY = " + str(minPathCostKey))
     print("Minimum path cost VALUE = " + str(goalStatePath[minPathCostKey]))
@@ -187,32 +191,16 @@ def pathCost(gNode, sNode, g, index):
     finishedList = [gNode.xy]
     
     cost = 0
-    gNode = g.nodes[g.G[index].xy[1], g.G[index].xy[0]] #Physical goal node
-    print("gNode.xy" + str(gNode.xy))
-    curNode = g.nodes[gNode.xy[1], gNode.xy[0]]
+    gNode = g.nodes[g.G[index].xy[0], g.G[index].xy[1]] #Physical goal node
+    
+    curNode = g.nodes[gNode.xy[0], gNode.xy[1]]
     flag = True 
     while(curNode.xy != sNode.xy):
-        '''
-        if (flag == True):
-            curNode = g.nodes[gNode.xy[0], gNode.xy[1]]
-            flag == False
-        else:
-            curNode = g.nodes[gNode.xy[1], gNode.xy[0]]
-            '''
-        #print("curNode.xy" + str(curNode.xy))
         curNode = curNode.prev
         finishedList.append(curNode.xy)
-        print("x" + str(curNode.xy[0]))
-        print("y" + str(curNode.xy[1]))
-        print("curNode.xy" + str(curNode.xy))
         cost += curNode.nCost
-        print("after Cost = " + str(cost))
-    
-    newX = finishedList[0][0]
-    newY = finishedList[0][1]
-    finishedList = finishedList[1:]    
+        #print("after Cost = " + str(cost))
     finishedList.reverse()
-    finishedList.append((newY, newX)) 
     print("Order = " + str(finishedList))
     print("Cost = " + str(cost))
     print("in function = " + str(goalStatePath))
