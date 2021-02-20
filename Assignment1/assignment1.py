@@ -116,7 +116,7 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
 
     """MIGHT NEED TO REVERSE THE xy's so 0 is first and 1 is second"""
     g.nodes[g.S.xy[1], g.S.xy[0]].nCost = 0  #Start node cost at 0
-    sNode = g.nodes[g.S.xy[1], g.S.xy[0]] #Physical start node
+    sNode = g.nodes[g.S.xy[0], g.S.xy[1]] #Physical start node
     pq.put((0, sNode))   #Priority queue start node
     '''
     Assuming this is just one goal node
@@ -139,7 +139,7 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
     #print the minimum path at the end to the goal state
     goalStatePath = {}
     for index in range(len(g.G)):
-        gNode = g.nodes[g.G[index].xy[1], g.G[index].xy[0]] #Physical goal node
+        gNode = g.nodes[g.G[index].xy[0], g.G[index].xy[1]] #Physical goal node
     #^^^make sure the bottom code is nested within this for loop 
         print("Goal Node" + str(gNode.xy))
         while (not pq.empty()):   
@@ -154,7 +154,6 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
             if (lowest.xy == gNode.xy):   #Reached end node     
                 print("REACHED END NODE")
                 #declare new function here  
-                
                 break
 
             for i in range(len(neighbours)):    #neighbours[i].n2 is the current node we're checking         
@@ -174,7 +173,8 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
                     print("\t\tUpdating Cost From " + str(neighbours[i].n2.nCost) + " to " + str(nodeCost))
         
         print("done")
-    pathCost(gNode, sNode,g)
+        pathCost(gNode, sNode,g)
+        
     minPathCostKey = min(goalStatePath.keys())
     print("Minimum path cost KEY = " + str(minPathCostKey))
     print("Minimum path cost VALUE = " + str(goalStatePath[minPathCostKey]))
