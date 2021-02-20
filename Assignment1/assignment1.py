@@ -111,7 +111,7 @@ class Graph:
 # exploredListFilename is the name of the file the list of explored nodes should be written to
 def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
     #Import CSV
-    csv = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment1/Example1/input.csv", delimiter=",", dtype="str")
+    csv = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment1/Example2/rectangle2.csv", delimiter=",", dtype="str")
     csv = np.char.strip(csv)
 
     print(csv)
@@ -194,7 +194,6 @@ def pathCost(gNode, sNode, g, index):
     gNode = g.nodes[g.G[index].xy[0], g.G[index].xy[1]] #Physical goal node
     
     curNode = g.nodes[gNode.xy[0], gNode.xy[1]]
-    flag = True 
     while(curNode.xy != sNode.xy):
         curNode = curNode.prev
         finishedList.append(curNode.xy)
@@ -203,7 +202,6 @@ def pathCost(gNode, sNode, g, index):
     finishedList.reverse()
     print("Order = " + str(finishedList))
     print("Cost = " + str(cost))
-    print("in function = " + str(goalStatePath))
     goalStatePath[cost] = finishedList #add to the dictionary, key: cost, value: finishedList
 
 def main():
