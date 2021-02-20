@@ -106,7 +106,7 @@ class Graph:
 # exploredListFilename is the name of the file the list of explored nodes should be written to
 def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
     #Import CSV
-    csv = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment1/Example2/input.csv", delimiter=",", dtype="str")
+    csv = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment1/Example2/rectangle.csv", delimiter=",", dtype="str")
     csv = np.char.strip(csv)
 
     print(csv)
@@ -173,7 +173,7 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
                     print("\t\tUpdating Cost From " + str(neighbours[i].n2.nCost) + " to " + str(nodeCost))
         
         print("done")
-        pathCost(gNode, sNode,g)
+        pathCost(gNode, sNode,g, index)
 
     print("Dictionary items " + str(goalStatePath.keys()))
     minPathCostKey = min(goalStatePath.keys())
@@ -182,30 +182,42 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
     optimalPathCost = 0
     return optimalPathCost
 
-def pathCost(gNode, sNode, g):
+def pathCost(gNode, sNode, g, index):
 
     finishedList = [gNode.xy]
+    
     cost = 0
-
-    curNode = g.nodes[gNode.xy[0], gNode.xy[1]]
+    gNode = g.nodes[g.G[index].xy[1], g.G[index].xy[0]] #Physical goal node
+    print("gNode.xy" + str(gNode.xy))
+    curNode = g.nodes[gNode.xy[1], gNode.xy[0]]
+    flag = True 
     while(curNode.xy != sNode.xy):
+        '''
+        if (flag == True):
+            curNode = g.nodes[gNode.xy[0], gNode.xy[1]]
+            flag == False
+        else:
+            curNode = g.nodes[gNode.xy[1], gNode.xy[0]]
+            '''
+        #print("curNode.xy" + str(curNode.xy))
         curNode = curNode.prev
         finishedList.append(curNode.xy)
-        print("before Cost = " + str(cost))
+        print("x" + str(curNode.xy[0]))
+        print("y" + str(curNode.xy[1]))
+        print("curNode.xy" + str(curNode.xy))
         cost += curNode.nCost
         print("after Cost = " + str(cost))
-
+    
+    newX = finishedList[0][0]
+    newY = finishedList[0][1]
+    finishedList = finishedList[1:]    
     finishedList.reverse()
+    finishedList.append((newY, newX)) 
     print("Order = " + str(finishedList))
     print("Cost = " + str(cost))
     print("in function = " + str(goalStatePath))
     goalStatePath[cost] = finishedList #add to the dictionary, key: cost, value: finishedList
 
-'''
-    minPathCostKey = min(goalStatePath.keys())
-    print("Minimum path cost KEY = " + str(minPathCostKey))
-    print("Minimum path cost VALUE = " + str(goalStatePath[minPathCostKey]))
-'''
 def main():
     cost = pathfinding("a", "a", "a")
 
