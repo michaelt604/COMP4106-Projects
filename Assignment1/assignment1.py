@@ -137,7 +137,7 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
     #key: path cost ->
     #value: order ->
     #print the minimum path at the end to the goal state
-    goalStatePath = {}
+    #goalStatePath = {}
     for index in range(len(g.G)):
         gNode = g.nodes[g.G[index].xy[0], g.G[index].xy[1]] #Physical goal node
     #^^^make sure the bottom code is nested within this for loop 
@@ -174,12 +174,12 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
         
         print("done")
         pathCost(gNode, sNode,g)
-        
+
+    print("Dictionary items " + str(goalStatePath.keys()))
     minPathCostKey = min(goalStatePath.keys())
     print("Minimum path cost KEY = " + str(minPathCostKey))
     print("Minimum path cost VALUE = " + str(goalStatePath[minPathCostKey]))
     optimalPathCost = 0
-
     return optimalPathCost
 
 def pathCost(gNode, sNode, g):
@@ -198,6 +198,7 @@ def pathCost(gNode, sNode, g):
     finishedList.reverse()
     print("Order = " + str(finishedList))
     print("Cost = " + str(cost))
+    print("in function = " + str(goalStatePath))
     goalStatePath[cost] = finishedList #add to the dictionary, key: cost, value: finishedList
 
 '''
