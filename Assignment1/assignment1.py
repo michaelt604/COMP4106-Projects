@@ -111,7 +111,7 @@ class Graph:
 # exploredListFilename is the name of the file the list of explored nodes should be written to
 def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
     #Import CSV
-    csv = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment1/Example2/rectangle2.csv", delimiter=",", dtype="str")
+    csv = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment1/Example2/input.csv", delimiter=",", dtype="str")
     csv = np.char.strip(csv)
 
     print(csv)
@@ -159,6 +159,10 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
             if (lowest.xy == gNode.xy):   #Reached end node     
                 print("REACHED END NODE")
                 #declare new function here  
+                print("final explored nodes:" + str(checked))
+                fileExplored = open("fileExplored.txt", "w")
+                fileExplored.write(str(checked))
+                fileExplored.close()
                 break
 
             for i in range(len(neighbours)):    #neighbours[i].n2 is the current node we're checking         
@@ -183,6 +187,14 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
     minPathCostKey = min(goalStatePath.keys())
     print("Minimum path cost KEY = " + str(minPathCostKey))
     print("Minimum path cost VALUE = " + str(goalStatePath[minPathCostKey]))
+    
+    filePathCost = open("filePathCost.txt", "w")
+    filePathCost.write(str(goalStatePath[minPathCostKey]))
+    filePathCost.close()
+
+    fileMinCost = open("fileMinCost.txt", "w")
+    fileMinCost.write(str(minPathCostKey))
+    fileMinCost.close()
     optimalPathCost = 0
     return optimalPathCost
 
