@@ -36,6 +36,14 @@ def naive_bayes_classifier(input):
 
 
 
+        #P(e1 AND e2 AND e3 | h) = P(e1 | h) * P(e2 | h) * P3(e3 | h)
+        #SumForEachHypothesis(P(e1 | h) * P2(e2 | h) * P3(e3 | h) * P(h))
+
+
+        #P(girth=x AND height=y AND weight=z)
+        #= SummedForEachHypothesis(P(e1 AND e2 AND e3 | h) * P(h))
+        #= SumForEachHypothesis(P(e1 | h) * P2(e2 | h) * P3(e3 | h) * P(h))   ***DENUMERATOR Still not sure how to get the actual probabilities
+
 
     #For all types
     #P(type | inputs)
