@@ -76,28 +76,33 @@ def fuzzy_classifier(input):
 
     secondB = sNorm(girthList.get('small'), weightList.get('light'))
     beagle = tNorm(heightList.get('medium'), secondB )
-    print('beagle: ', str(beagle))
+    #print('beagle: ', str(beagle))
 
     corgi = tNorm(tNorm(girthList.get('medium'),heightList.get('short')), weightList.get('medium'))
-    print('corgi: ', str(corgi))
+    #print('corgi: ', str(corgi))
 
     firstHusky = tNorm(girthList.get('large'), heightList.get('tall'))
     
     husky = tNorm( firstHusky, weightList.get('medium'))
-    print('husky: ', str(husky))
-
-
+    #print('husky: ', str(husky))
 
     poodle = tNorm( sNorm(girthList.get('medium'),heightList.get('medium')), weightList.get('heavy'))
-    print('poodle: ', str(poodle))
+    #print('poodle: ', str(poodle))
 
-    '''
-    corgi =
-    husky = 
-    poodle = 
-    '''
+    doggos = {"beagle": beagle, "corgi": corgi, "husky": husky, "poodle":poodle }
+    #print(doggos)
 
-    #doggoArray = [beagle, corgi, husky, poodle]
+    highest_membership_class = ''
+    class_memberships = doggos.values()
+    maxValue = max(doggos.values())
+
+    for key in doggos.keys():
+        if (doggos[key] == maxValue):
+            highest_membership_class = key
+    
+    print(highest_membership_class)
+    print(class_memberships)
+
     #return highest_membership_class, class_memberships
 
 # this function returns a new list 
@@ -105,41 +110,41 @@ def newList(x, sizeList):
 
     newDictionary = {}
     for key in sizeList.keys():
-        print("key: " + str(key))
+        #print("key: " + str(key))
         #print(sizeList.get(key)[0])
         a = sizeList.get(key)[0]
         b = sizeList.get(key)[1]
         c = sizeList.get(key)[2]
         d = sizeList.get(key)[3]
+        '''
         print("a: " + str(a))
         print("b: " + str(b))
         print("c: " + str(c))
         print("d: " + str(d))
+        '''
         
         if (x<=a):
-            print("x<=a")
+            #print("x<=a")
             newDictionary[key] = 0
 
         elif ((a<x) and (x<b)):
-            print("(a<x) and (x<b)")
+            #print("(a<x) and (x<b)")
             newDictionary[key] = ((x-a)/(b-a))
-            print(x-a)
-            print(b-a)
-            print(round(((x-a)/(b-a)),2 ) )
+            #print(x-a)
+            #print(b-a)
+            #print(round(((x-a)/(b-a)),2 ) )
 
         elif ((b<=x)and(x<=c)):
-            print("((b<=x)and(x<=c))")
+            #print("((b<=x)and(x<=c))")
             newDictionary[key] = 1
 
         elif ((c<x) and (x<d)):
-            print("((c<x) and (x<d)))")
+            #print("((c<x) and (x<d)))")
             newDictionary[key] = ((d-x)/(d-c))
         else:
-            print("else")
+            #print("else")
             newDictionary[key] = 0
 
-    print("newDictionary: " + str(newDictionary))
-    #return a dictionary
     return newDictionary
 
 def tNorm(x,y):
@@ -151,7 +156,7 @@ def sNorm(x,y):
     return x+y-(x*y)
 
 def main():
-    input = [65, 55, 30]
+    input = [59, 32, 17]
     fuzzy_classifier(input)
     return
 
