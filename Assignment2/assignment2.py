@@ -57,9 +57,9 @@ def naive_bayes_classifier(input):
             highestProb = breedProb     #Update highest probabilitiy
             mostLikelyClass = b       #Update most likely class string       
 
-    print(probabilities)        #Probability dictionary output (Comment out later, debugging purposes)
-    print(mostLikelyClass)      #Most likely class output (Comment out later, debugging purposes)
-    print(classProbabilities)   #class probability output (Comment out later, debugging purposes)
+    #print(probabilities)        #Probability dictionary output (Comment out later, debugging purposes)
+    #print(mostLikelyClass)      #Most likely class output (Comment out later, debugging purposes)
+    #print(classProbabilities)   #class probability output (Comment out later, debugging purposes)
 
     return mostLikelyClass, classProbabilities
 
@@ -82,7 +82,8 @@ def main():
     classifierInput = [int(txtInput[0]), int(txtInput[1]), int(txtInput[2])]
     
     #Run naive bayes
-    naive_bayes_classifier(classifierInput)
+    mostLikelyClass, classProbabilities = naive_bayes_classifier(classifierInput)
+    print(f'"{mostLikelyClass}, {classProbabilities}')  #Final Naive output
 
     #Run fuzzy
     #fuzzy_classifier(classifierInput)
