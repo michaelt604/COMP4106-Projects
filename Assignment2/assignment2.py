@@ -1,8 +1,8 @@
-
 import numpy as np
 import csv
 import math
 import sys
+from io import StringIO
 
 
 class Prob: #Probability class for all base probabilities and values
@@ -62,6 +62,7 @@ def naive_bayes_classifier(input):
     print(classProbabilities)   #class probability output (Comment out later, debugging purposes)
 
     return mostLikelyClass, classProbabilities
+
 
 # input is a three element list with [girth, height, weight]
 def fuzzy_classifier(input):
@@ -163,7 +164,7 @@ def sNorm(x,y):
     return x+y-(x*y)
 
 def main():
-    txtInput = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment2/Example1/input.txt", delimiter=",", dtype="str")  #Input as string so string operations can be performed
+    txtInput = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment2/Example2/input.txt", delimiter=",", dtype="str")  #Input as string so string operations can be performed
     txtInput = np.char.strip(txtInput)              #Remove whitespace
     txtInput = np.char.replace(txtInput, "[", "")   #Remove random extra brackets
     txtInput = np.char.replace(txtInput, "]", "")   #Remove random extra brackets
