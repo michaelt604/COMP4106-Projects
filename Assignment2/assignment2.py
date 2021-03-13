@@ -8,10 +8,10 @@ from io import StringIO
 class Prob: #Probability class for all base probabilities and values
     def __init__(self):
         #Dog Breed: Girth, Hiehgt, Weight, Probability
-        self.breeds = [ ["beagle",  ["girth", 41, 6],   ["height", 37, 4],  ["weight", 10,2], 0.3], 
-                        ["corgi",   ["girth", 53, 9],   ["height", 27, 3],  ["weight", 12,2], 0.21], 
-                        ["husky",   ["girth", 66, 10],  ["height", 55, 6],  ["weight", 22,6], 0.14], 
-                        ["poodle",  ["girth", 61, 9],   ["height", 52, 7],  ["weight", 26,8], 0.35]]
+        self.breeds = [ ["beagle",  ["girth", 41, 6],   ["height", 37, 4],  ["weight", 10, 2], 0.3], 
+                        ["corgi",   ["girth", 53, 9],   ["height", 27, 3],  ["weight", 12, 2], 0.21], 
+                        ["husky",   ["girth", 66, 10],  ["height", 55, 6],  ["weight", 22, 6], 0.14], 
+                        ["poodle",  ["girth", 61, 9],   ["height", 52, 7],  ["weight", 26, 8], 0.35]]
 
 
 # P(characterstic | breed) = (1/sqrt(2*math.pi*(o**2))) * e **(-0.5((inputVar = u)/o)**2)
@@ -74,7 +74,7 @@ def naive_bayes_classifier(input):
 
 def main():
     #Input parsing and santizing
-    txtInput = np.genfromtxt("Assignment2/Example1/input.txt", delimiter=",", dtype="str")  #Input as string so string operations can be performed
+    txtInput = np.genfromtxt("Assignment2/Example2/input.txt", delimiter=",", dtype="str")  #Input as string so string operations can be performed
     txtInput = np.char.strip(txtInput)              #Remove whitespace
     txtInput = np.char.replace(txtInput, "[", "")   #Remove random extra brackets
     txtInput = np.char.replace(txtInput, "]", "")   #Remove random extra brackets
