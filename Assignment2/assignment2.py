@@ -5,14 +5,23 @@ import math
 import sys
 
 
-
-'''
-class Prob:
+class Prob: #Probability class for all base probabilities and values
     def __init__(self):
-        self.breeds = ["beagle", "corgi", "husky", "poodle"]
-        self.breedOds = {"beagle": 0.3, "corgi": 0.21, "husky": 0.14, "poodle": 0.35}
+        #Dog Breed: Girth, Hiehgt, Weight, Probability
+        self.breeds = [ ["beagle",  ["girth", 41, 6],   ["height", 37, 4],  ["weight", 10,2], 0.3], 
+                        ["corgi",   ["girth", 53, 9],   ["height", 27, 3],  ["weight", 12,2], 0.21], 
+                        ["husky",   ["girth", 66, 10],  ["height", 55, 6],  ["weight", 22,6], 0.14], 
+                        ["poodle",  ["girth", 61, 9],   ["height", 52, 7],  ["weight", 26,8], 0.35]]
 
 
+# P(characterstic | breed) = (1/sqrt(2*math.pi*(o**2))) * e **(-0.5((inputVar = u)/o)**2)
+def breedCharacteristic(dogDimension, u, o):         #returns probability of dog characterstic, calculated in parts to avoid computational errors
+    part1 = 1 / (math.sqrt(2 * math.pi * (o ** 2)))
+    eExponent = -0.5 * (((dogDimension - u) / o) ** 2)
+    part2 = math.exp(eExponent)
+
+    PCharBreed = part1 * part2
+    return PCharBreed
 
 
 #Input is a three element list with [girth, height, weight]
@@ -23,39 +32,37 @@ def naive_bayes_classifier(input):
     weight = input[2]
 
     prob = Prob()   #Probability class
+    probabilities = {}  #Probability dictionary of Breed: Probability
 
-    for breed in prob.breeds:
-        calc = 0
+    summedForEachBreed = 0   #Our end denominator, ends up as the sum of each breed with (P(Girth | breed) * P(Height | Breed) * P3(Weight | Breed) * P(Breed)).
+    for breed in prob.breeds:  
+        dogBreed = breed[0]  
+        probGirthBreed = breedCharacteristic(girth, breed[1][1], breed[1][2])   #P(Girth | Breed)
+        probHeightBreed = breedCharacteristic(height, breed[2][1], breed[2][2]) #P(Height | Breed)
+        probWeightBreed = breedCharacteristic(weight, breed[3][1], breed[3][2]) #P(Weight | Breed)
 
-        #P(A|B) = P(A ^ B) / P(B)
+        breedNumerator = probGirthBreed * probHeightBreed * probWeightBreed * breed[4]    #Numerator in final calculation
+        probabilities[breed[0]] = breedNumerator    #Set our dictionary values for final calc later
+        summedForEachBreed += breedNumerator        #Add to our final denominator
 
-        #P(Girth | Dog) / P()
+    mostLikelyClass = ""  #Final Class output
+    highestProb = 0         #Probability tracker
+    classProbabilities = []
 
-        probGirthBreed = 0  
-        probHeightBreed = 0 
-        probWeightBreed = 0
+    for b in probabilities.keys():  #For each rough probability (just numerator)
+        breedProb = probabilities[b] / summedForEachBreed    #Divide by SummedForEachBreed
+        probabilities[b] = breedProb    #Prob remove later
+        classProbabilities.append(breedProb)    #Add to our return list
+        if (breedProb > highestProb):
+            highestProb = breedProb     #Update highest probabilitiy
+            mostLikelyClass = b       #Update most likely class string       
 
+    print(probabilities)        #Probability dictionary output (Comment out later, debugging purposes)
+    print(mostLikelyClass)      #Most likely class output (Comment out later, debugging purposes)
+    print(classProbabilities)   #class probability output (Comment out later, debugging purposes)
 
+    return mostLikelyClass, classProbabilities
 
-        #P(e1 AND e2 AND e3 | h) = P(e1 | h) * P(e2 | h) * P3(e3 | h)
-        #SumForEachHypothesis(P(e1 | h) * P2(e2 | h) * P3(e3 | h) * P(h))
-
-
-        #P(girth=x AND height=y AND weight=z)
-        #= SummedForEachHypothesis(P(e1 AND e2 AND e3 | h) * P(h))
-        #= SumForEachHypothesis(P(e1 | h) * P2(e2 | h) * P3(e3 | h) * P(h))   ***DENUMERATOR Still not sure how to get the actual probabilities
-
-
-    #For all types
-    #P(type | inputs)
-    #P(girth = x | type) * P(height = y | type) * P (weight = z | type)
-    #/ P(girth = x ^ height = y ^ weight = z)
-    #Put estimate into a list then go next
-
-    #most_likely_class is a string indicating the most likely class, either "beagle", "corgi", "husky", or "poodle"
-    #class_probabilities is a four element list indicating the probability of each class in the order [beagle probability, corgi probability, husky probability, poodle probability]
-    return most_likely_class, class_probabilities
-'''
 # input is a three element list with [girth, height, weight]
 def fuzzy_classifier(input):
 
@@ -156,9 +163,21 @@ def sNorm(x,y):
     return x+y-(x*y)
 
 def main():
-    input = [59, 32, 17]
-    fuzzy_classifier(input)
+    txtInput = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment2/Example1/input.txt", delimiter=",", dtype="str")  #Input as string so string operations can be performed
+    txtInput = np.char.strip(txtInput)              #Remove whitespace
+    txtInput = np.char.replace(txtInput, "[", "")   #Remove random extra brackets
+    txtInput = np.char.replace(txtInput, "]", "")   #Remove random extra brackets
+
+    classifierInput = [int(txtInput[0]), int(txtInput[1]), int(txtInput[2])]
+    
+    #Run naive bayes
+    naive_bayes_classifier(classifierInput)
+
+    #Run fuzzy
+    fuzzy_classifier(classifierInput)
+
     return
+
 
 if (__name__ == "__main__"):
     main()
