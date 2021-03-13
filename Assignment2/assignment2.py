@@ -8,10 +8,10 @@ from io import StringIO
 class Prob: #Probability class for all base probabilities and values
     def __init__(self):
         #Dog Breed: Girth, Hiehgt, Weight, Probability
-        self.breeds = [ ["beagle",  ["girth", 41, 6],   ["height", 37, 4],  ["weight", 10,2], 0.3], 
-                        ["corgi",   ["girth", 53, 9],   ["height", 27, 3],  ["weight", 12,2], 0.21], 
-                        ["husky",   ["girth", 66, 10],  ["height", 55, 6],  ["weight", 22,6], 0.14], 
-                        ["poodle",  ["girth", 61, 9],   ["height", 52, 7],  ["weight", 26,8], 0.35]]
+        self.breeds = [ ["beagle",  ["girth", 41, 6],   ["height", 37, 4],  ["weight", 10, 2], 0.3], 
+                        ["corgi",   ["girth", 53, 9],   ["height", 27, 3],  ["weight", 12, 2], 0.21], 
+                        ["husky",   ["girth", 66, 10],  ["height", 55, 6],  ["weight", 22, 6], 0.14], 
+                        ["poodle",  ["girth", 61, 9],   ["height", 52, 7],  ["weight", 26, 8], 0.35]]
 
 
 # P(characterstic | breed) = (1/sqrt(2*math.pi*(o**2))) * e **(-0.5((inputVar = u)/o)**2)
@@ -57,9 +57,9 @@ def naive_bayes_classifier(input):
             highestProb = breedProb     #Update highest probabilitiy
             mostLikelyClass = b       #Update most likely class string       
 
-    print(probabilities)        #Probability dictionary output (Comment out later, debugging purposes)
-    print(mostLikelyClass)      #Most likely class output (Comment out later, debugging purposes)
-    print(classProbabilities)   #class probability output (Comment out later, debugging purposes)
+    #print(probabilities)        #Probability dictionary output (Comment out later, debugging purposes)
+    #print(mostLikelyClass)      #Most likely class output (Comment out later, debugging purposes)
+    #print(classProbabilities)   #class probability output (Comment out later, debugging purposes)
 
     return mostLikelyClass, classProbabilities
 
@@ -172,7 +172,8 @@ def main():
     classifierInput = [int(txtInput[0]), int(txtInput[1]), int(txtInput[2])]
     
     #Run naive bayes
-    naive_bayes_classifier(classifierInput)
+    mostLikelyClass, classProbabilities = naive_bayes_classifier(classifierInput)
+    #print(f'{mostLikelyClass}, {classProbabilities}')  #Final Naive output
 
     #Run fuzzy
     fuzzy_classifier(classifierInput)
