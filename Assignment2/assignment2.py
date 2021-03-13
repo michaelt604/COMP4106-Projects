@@ -61,52 +61,35 @@ def fuzzy_classifier(input):
 
     # highest_membership_class is a string indicating the highest membership class, either "beagle", "corgi", "husky", or "poodle"
     # class_memberships is a four element list indicating the membership in each class in the order [beagle probability, corgi probability, husky probability, poodle probability]
-    '''
-    if (height is medium and girth is small) 
-    then: beagle
-
-    if (girth is medium and height is short and weight is medium)
-    then: corgi
-
-    if (girth is large and height is tall and weight is medium) 
-    then: husky
-
-    if (girth is medium or height is medium) and weight is heavy
-    then: poodle
-    '''
 
     #dictionary for girth small, medium, and large values
     #value is an array for a,b,c,d
     
-    girth = {'small': [0.0,0.0, 40.0, 50.0],'medium': [ 40.0, 50.0, 60.0, 0.0],'large': [60.0, 70.0, 100.0, 100.0]}
-    height = {'short': [0.0,0.0, 25.0, 40.0],'medium': [ 25.0,40.0, 50.0, 60.0],'heavy': [50.0, 60.0, 100.0, 100.0]}
+    girth = {'small': [0.0,0.0, 40.0, 50.0],'medium': [ 40.0, 50.0, 60.0, 70.0],'large': [60.0, 70.0, 100.0, 100.0]}
+    height = {'short': [0.0,0.0, 25.0, 40.0],'medium': [ 25.0,40.0, 50.0, 60.0],'tall': [50.0, 60.0, 100.0, 100.0]}
     weight = {'light': [0.0,0.0, 5.0, 15.0],'medium': [5.0, 15.0, 20.0, 40.0],'heavy': [20.0, 40.0, 100.0, 100.0]}
    
     
     girthList = newList(input[0], girth)
     heightList = newList(input[1], height)
     weightList = newList(input[2], weight)
-    '''
-    if (height is medium and girth is small) 
-    then: beagle
 
-    if (girth is medium and height is short and weight is medium)
-    then: corgi
+    secondB = sNorm(girthList.get('small'), weightList.get('light'))
+    beagle = tNorm(heightList.get('medium'), secondB )
+    print('beagle: ', str(beagle))
 
-    if (girth is large and height is tall and weight is medium) 
-    then: husky
+    corgi = tNorm(tNorm(girthList.get('medium'),heightList.get('short')), weightList.get('medium'))
+    print('corgi: ', str(corgi))
 
-    if (girth is medium or height is medium) and weight is heavy
-    then: poodle
-    '''
-    beagle = tNorm(heightList.get('medium'), sNorm(girthList.get('small'), weightList.get('light')))
-    print(beagle)
-    corgi = tNorm(tNorm(girthList.get('medium'),heightList.get('short')),weightList.get('medium'))
-    print(corgi)
-    husky = tNorm(tNorm(girthList.get('large'),heightList.get('short')),weightList.get('medium'))
-    print(husky)
-    poodle = tNorm(sNorm(girthList.get('medium'),heightList.get('medium')),weightList.get('heavy'))
-    print(poodle)
+    firstHusky = tNorm(girthList.get('large'), heightList.get('tall'))
+    
+    husky = tNorm( firstHusky, weightList.get('medium'))
+    print('husky: ', str(husky))
+
+
+
+    poodle = tNorm( sNorm(girthList.get('medium'),heightList.get('medium')), weightList.get('heavy'))
+    print('poodle: ', str(poodle))
 
     '''
     corgi =
@@ -160,9 +143,11 @@ def newList(x, sizeList):
     return newDictionary
 
 def tNorm(x,y):
+
     return x*y
 
 def sNorm(x,y):
+
     return x+y-(x*y)
 
 def main():
