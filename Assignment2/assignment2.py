@@ -8,10 +8,10 @@ from io import StringIO
 class Prob: #Probability class for all base probabilities and values
     def __init__(self):
         #Dog Breed: Girth, Hiehgt, Weight, Probability
-        self.breeds = [ ["beagle",  ["girth", 41, 6],   ["height", 37, 4],  ["weight", 10,2], 0.3], 
-                        ["corgi",   ["girth", 53, 9],   ["height", 27, 3],  ["weight", 12,2], 0.21], 
-                        ["husky",   ["girth", 66, 10],  ["height", 55, 6],  ["weight", 22,6], 0.14], 
-                        ["poodle",  ["girth", 61, 9],   ["height", 52, 7],  ["weight", 26,8], 0.35]]
+        self.breeds = [ ["beagle",  ["girth", 41, 6],   ["height", 37, 4],  ["weight", 10, 2], 0.3], 
+                        ["corgi",   ["girth", 53, 9],   ["height", 27, 3],  ["weight", 12, 2], 0.21], 
+                        ["husky",   ["girth", 66, 10],  ["height", 55, 6],  ["weight", 22, 6], 0.14], 
+                        ["poodle",  ["girth", 61, 9],   ["height", 52, 7],  ["weight", 26, 8], 0.35]]
 
 
 # P(characterstic | breed) = (1/sqrt(2*math.pi*(o**2))) * e **(-0.5((inputVar = u)/o)**2)
@@ -64,6 +64,35 @@ def naive_bayes_classifier(input):
     return mostLikelyClass, classProbabilities
 
 
+
+def tNorm(x,y): #Return T-norm
+    return x*y
+
+def sNorm(x,y): #Return S-norm
+    return x+y-(x*y)
+
+def newList(x, sizeList):   # this function returns a new list 
+    newDictionary = {}
+    for key in sizeList.keys():
+        a = sizeList.get(key)[0]
+        b = sizeList.get(key)[1]
+        c = sizeList.get(key)[2]
+        d = sizeList.get(key)[3]
+        
+        if (x <= a):
+            newDictionary[key] = 0
+        elif ((a < x) and (x < b)):
+            newDictionary[key] = ((x-a)/(b-a))
+        elif ((b <= x) and (x <= c)):
+            newDictionary[key] = 1
+        elif ((c < x) and (x < d)):
+            newDictionary[key] = ((d-x)/(d-c))
+        else:
+            newDictionary[key] = 0
+
+    return newDictionary
+
+
 # input is a three element list with [girth, height, weight]
 def fuzzy_classifier(input):
 
@@ -87,18 +116,10 @@ def fuzzy_classifier(input):
     #print('beagle: ', str(beagle))
 
     corgi = tNorm(tNorm(girthList.get('medium'),heightList.get('short')), weightList.get('medium'))
-    #print('corgi: ', str(corgi))
-
     firstHusky = tNorm(girthList.get('large'), heightList.get('tall'))
-    
     husky = tNorm( firstHusky, weightList.get('medium'))
-    #print('husky: ', str(husky))
-
     poodle = tNorm( sNorm(girthList.get('medium'),heightList.get('medium')), weightList.get('heavy'))
-    #print('poodle: ', str(poodle))
-
     doggos = {"beagle": beagle, "corgi": corgi, "husky": husky, "poodle":poodle }
-    #print(doggos)
 
     highest_membership_class = ''
     class_memberships = doggos.values()
@@ -113,58 +134,8 @@ def fuzzy_classifier(input):
 
     #return highest_membership_class, class_memberships
 
-# this function returns a new list 
-def newList(x, sizeList):
-
-    newDictionary = {}
-    for key in sizeList.keys():
-        #print("key: " + str(key))
-        #print(sizeList.get(key)[0])
-        a = sizeList.get(key)[0]
-        b = sizeList.get(key)[1]
-        c = sizeList.get(key)[2]
-        d = sizeList.get(key)[3]
-        '''
-        print("a: " + str(a))
-        print("b: " + str(b))
-        print("c: " + str(c))
-        print("d: " + str(d))
-        '''
-        
-        if (x<=a):
-            #print("x<=a")
-            newDictionary[key] = 0
-
-        elif ((a<x) and (x<b)):
-            #print("(a<x) and (x<b)")
-            newDictionary[key] = ((x-a)/(b-a))
-            #print(x-a)
-            #print(b-a)
-            #print(round(((x-a)/(b-a)),2 ) )
-
-        elif ((b<=x)and(x<=c)):
-            #print("((b<=x)and(x<=c))")
-            newDictionary[key] = 1
-
-        elif ((c<x) and (x<d)):
-            #print("((c<x) and (x<d)))")
-            newDictionary[key] = ((d-x)/(d-c))
-        else:
-            #print("else")
-            newDictionary[key] = 0
-
-    return newDictionary
-
-def tNorm(x,y):
-
-    return x*y
-
-def sNorm(x,y):
-
-    return x+y-(x*y)
-
 def main():
-    txtInput = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment2/Example2/input.txt", delimiter=",", dtype="str")  #Input as string so string operations can be performed
+    txtInput = np.genfromtxt("Assignment2/Example1/input.txt", delimiter=",", dtype="str")  #Input as string so string operations can be performed
     txtInput = np.char.strip(txtInput)              #Remove whitespace
     txtInput = np.char.replace(txtInput, "[", "")   #Remove random extra brackets
     txtInput = np.char.replace(txtInput, "]", "")   #Remove random extra brackets
