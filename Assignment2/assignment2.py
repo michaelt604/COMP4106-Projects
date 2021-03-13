@@ -1,4 +1,3 @@
-
 #import numpy as np
 import csv
 import math
@@ -66,6 +65,8 @@ def naive_bayes_classifier(input):
 
     #most_likely_class is a string indicating the most likely class, either "beagle", "corgi", "husky", or "poodle"
     #class_probabilities is a four element list indicating the probability of each class in the order [beagle probability, corgi probability, husky probability, poodle probability]
+    print(most_likely_class)
+    print(class_probabilities)
     return most_likely_class, class_probabilities
 
 # input is a three element list with [girth, height, weight]
@@ -80,6 +81,7 @@ def naive_bayes_classifier(input):
 def main():
 
 
+    naive_bayes_classifier([59, 32, 17])
     return
 
 if (__name__ == "__main__"):
