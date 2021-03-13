@@ -83,7 +83,7 @@ def main():
     
     #Run naive bayes
     mostLikelyClass, classProbabilities = naive_bayes_classifier(classifierInput)
-    print(f'"{mostLikelyClass}, {classProbabilities}')  #Final Naive output
+    print(f'"{mostLikelyClass}", {classProbabilities}')  #Final Naive output
 
     #Run fuzzy
     #fuzzy_classifier(classifierInput)
