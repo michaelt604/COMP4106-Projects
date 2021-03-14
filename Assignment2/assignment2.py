@@ -12,9 +12,9 @@ class Prob: #Probability class for all base probabilities and values
                         ["corgi",   ["girth", 53, 9],   ["height", 27, 3],  ["weight", 12, 2], 0.21], 
                         ["husky",   ["girth", 66, 10],  ["height", 55, 6],  ["weight", 22, 6], 0.14], 
                         ["poodle",  ["girth", 61, 9],   ["height", 52, 7],  ["weight", 26, 8], 0.35]]
-        self.fuzzyGirth =   {'small': [0.0,0.0, 40.0, 50.0],'medium': [ 40.0, 50.0, 60.0, 70.0], 'large': [60.0, 70.0, 100.0, 100.0]}
-        self.fuzzyHeight =  {'short': [0.0,0.0, 25.0, 40.0],'medium': [ 25.0,40.0, 50.0, 60.0],  'tall': [50.0, 60.0, 100.0, 100.0]}
-        self.fuzzyWeight =  {'light': [0.0,0.0, 5.0, 15.0], 'medium': [5.0, 15.0, 20.0, 40.0],   'heavy': [20.0, 40.0, 100.0, 100.0]}
+        self.fuzzyGirth =   {'small': [0.0,0.0, 40.0, 50.0], 'medium': [ 40.0, 50.0, 60.0, 70.0], 'large': [60.0, 70.0, 100.0, 100.0]}
+        self.fuzzyHeight =  {'short': [0.0,0.0, 25.0, 40.0], 'medium': [ 25.0,40.0, 50.0, 60.0],  'tall':  [50.0, 60.0, 100.0, 100.0]}
+        self.fuzzyWeight =  {'light': [0.0,0.0, 5.0, 15.0],  'medium': [ 5.0, 15.0, 20.0, 40.0],  'heavy': [20.0, 40.0, 100.0, 100.0]}
 
 # P(characterstic | breed) = (1/sqrt(2*math.pi*(o**2))) * e **(-0.5((inputVar = u)/o)**2)
 def breedCharacteristic(dogDimension, u, o):         #returns probability of dog characterstic, calculated in parts to avoid computational errors
@@ -140,11 +140,11 @@ def main():
     
     #Run naive bayes classifier
     mostLikelyClass, classProbabilities = naive_bayes_classifier(classifierInput)
-    print(f'"{mostLikelyClass}", {classProbabilities}')  #Final Naive output
+    print(f'Naive Bayes Classifier: "{mostLikelyClass}", {classProbabilities}')  #Final Naive output
 
     #Run fuzzy classifier
     mostLikelyClass, classProbabilities = fuzzy_classifier(classifierInput)
-    print(f'"{mostLikelyClass}", {classProbabilities}')  #Final Naive output
+    print(f'Fuzzy Classifier: "{mostLikelyClass}", {classProbabilities}')  #Final Naive output
 
 if (__name__ == "__main__"):
     main()
