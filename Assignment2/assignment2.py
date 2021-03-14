@@ -12,6 +12,7 @@ class Prob: #Probability class for all base probabilities and values
                         ["corgi",   ["girth", 53, 9],   ["height", 27, 3],  ["weight", 12, 2], 0.21], 
                         ["husky",   ["girth", 66, 10],  ["height", 55, 6],  ["weight", 22, 6], 0.14], 
                         ["poodle",  ["girth", 61, 9],   ["height", 52, 7],  ["weight", 26, 8], 0.35]]
+        
         self.fuzzyGirth =   {'small': [0.0,0.0, 40.0, 50.0], 'medium': [ 40.0, 50.0, 60.0, 70.0], 'large': [60.0, 70.0, 100.0, 100.0]}
         self.fuzzyHeight =  {'short': [0.0,0.0, 25.0, 40.0], 'medium': [ 25.0,40.0, 50.0, 60.0],  'tall':  [50.0, 60.0, 100.0, 100.0]}
         self.fuzzyWeight =  {'light': [0.0,0.0, 5.0, 15.0],  'medium': [ 5.0, 15.0, 20.0, 40.0],  'heavy': [20.0, 40.0, 100.0, 100.0]}
@@ -130,6 +131,7 @@ def fuzzy_classifier(input):
 
 
 def main():
+    #Input parsing and santizing
     txtInput = np.genfromtxt("Assignment2/Example2/input.txt", delimiter=",", dtype="str")  #Input as string so string operations can be performed
     #txtInput = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment2/Example2/input.txt", delimiter=",", dtype="str")  #Input as string so string operations can be performed
     txtInput = np.char.strip(txtInput)              #Remove whitespace
@@ -141,7 +143,7 @@ def main():
     #Run naive bayes classifier
     mostLikelyClass, classProbabilities = naive_bayes_classifier(classifierInput)
     print(f'Naive Bayes Classifier: "{mostLikelyClass}", {classProbabilities}')  #Final Naive output
-
+    
     #Run fuzzy classifier
     mostLikelyClass, classProbabilities = fuzzy_classifier(classifierInput)
     print(f'Fuzzy Classifier: "{mostLikelyClass}", {classProbabilities}')  #Final Naive output
