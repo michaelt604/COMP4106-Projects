@@ -55,7 +55,7 @@ class Graph:
     def getWeight(self, n):
         if (n.id == "X"):    #Empty node
             return -1
-        if (n.id == "S"):   #Check node start 
+        if (n.id == "S"):   #Check node start
             self.S = n
             return 0
         if (n.id == "G"):   #Check node end
@@ -72,7 +72,7 @@ class Graph:
             #self.G = n
             return 0
         else:   #If a normal weighted node
-            return int(n.id)    
+            return int(n.id)
     
     def createGraph(self, xCount, yCount, grid):
         for j in range(xCount): #Create all our nodes
@@ -84,26 +84,26 @@ class Graph:
         print("yCount:"+ str(yCount))
         
         for i in range(xCount):   #Create all our edges
-            for j in range(yCount):   
+            for j in range(yCount):
                 node1 = self.nodes[j, i]
 
-                n1Weight = self.getWeight(node1)                
+                n1Weight = self.getWeight(node1)
                 if (n1Weight == -1):    #Empty node
                     continue
 
-                if (j + 1 < yCount):    #If theres a node to the right of the current node, link them together                    
+                if (j + 1 < yCount):    #If theres a node to the right of the current node, link them together
                     node2 = self.nodes[j+1, i]
-                    n2Weight = self.getWeight(node2)                
+                    n2Weight = self.getWeight(node2)
                     if (not n2Weight == -1):    #Empty node
-                        node1.addEdge(node2, n2Weight)    #Adds edge between nodes          
-                        node2.addEdge(node1, n1Weight)    #Adds edge between nodes     
+                        node1.addEdge(node2, n2Weight)    #Adds edge between nodes
+                        node2.addEdge(node1, n1Weight)    #Adds edge between nodes
 
                 if (i + 1 < xCount):    # if theres a node below the current node, link them together
                     node2 = self.nodes[j, i+1]
-                    n2Weight = self.getWeight(node2)                
+                    n2Weight = self.getWeight(node2)
                     if (not n2Weight == -1):    #Empty node
-                        node1.addEdge(node2, n2Weight)    #Adds edge between nodes          
-                        node2.addEdge(node1, n1Weight)    #Adds edge between nodes     
+                        node1.addEdge(node2, n2Weight)    #Adds edge between nodes
+                        node2.addEdge(node1, n1Weight)    #Adds edge between nodes
         
 
 # inputFileName contains a CSV file with the input grid
@@ -125,29 +125,29 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
     pq.put((0, sNode))   #Priority queue start node
     '''
     Assuming this is just one goal node
-    a way to set multiple goal nodes 
+    a way to set multiple goal nodes
     store in an array?
 
     gNode will refer to the array which will then access the coordinates
     '''
     #gNode = g.nodes[g.G.xy[1], g.G.xy[0]] #Physical goal node
-    #return the min value of a new list 
+    #return the min value of a new list
 
     for index in range(len(g.G)):
         print("gNode: " + str(g.G[index].xy))
     checked = []
     #Pathfind
 
-    #okay so store the key and value 
+    #okay so store the key and value
     #key: path cost ->
     #value: order ->
     #print the minimum path at the end to the goal state
     #goalStatePath = {}
     for index in range(len(g.G)):
         gNode = g.nodes[g.G[index].xy[0], g.G[index].xy[1]] #Physical goal node
-    #^^^make sure the bottom code is nested within this for loop 
+    #^^^make sure the bottom code is nested within this for loop
         print("Goal Node" + str(gNode.xy))
-        while (not pq.empty()):   
+        while (not pq.empty()):
             lowest = pq.get()   #Get lowest code node
 
             #Explore node
@@ -156,16 +156,16 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
             print("Explore: " + str(lowest.xy) + " - Explored: " + str(checked))
             neighbours = lowest.edges  #Nearby edges
 
-            if (lowest.xy == gNode.xy):   #Reached end node     
+            if (lowest.xy == gNode.xy):   #Reached end node
                 print("REACHED END NODE")
-                #declare new function here  
+                #declare new function here
                 print("final explored nodes:" + str(checked))
                 fileExplored = open("fileExplored.txt", "w")
                 fileExplored.write(str(checked))
                 fileExplored.close()
                 break
 
-            for i in range(len(neighbours)):    #neighbours[i].n2 is the current node we're checking         
+            for i in range(len(neighbours)):    #neighbours[i].n2 is the current node we're checking
                 if (lowest.prev.xy == neighbours[i].n2.xy): #Prevents checking the node that this node came from
                     continue
                 heuristic = 0    #No heuristic yet
@@ -178,7 +178,7 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
                     neighbours[i].n2.nCost = nodeCost    #Update node cost
                     neighbours[i].n2.prev = lowest      #Set new route node (lowest cost to node)
 
-                    pq.put((nodeCost, neighbours[i].n2))    #Add node to queue    
+                    pq.put((nodeCost, neighbours[i].n2))    #Add node to queue
                     print("\t\tUpdating Cost From " + str(neighbours[i].n2.nCost) + " to " + str(nodeCost))
         
         print("done")
@@ -188,11 +188,12 @@ def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
     print("Minimum path cost KEY = " + str(minPathCostKey))
     print("Minimum path cost VALUE = " + str(goalStatePath[minPathCostKey]))
     
-    filePathCost = open("filePathCost.txt", "w")
+    
+    filePathCost = open(optimalPathFilename, "w")
     filePathCost.write(str(goalStatePath[minPathCostKey]))
     filePathCost.close()
 
-    fileMinCost = open("fileMinCost.txt", "w")
+    fileMinCost = open(exploredListFilename, "w")
     fileMinCost.write(str(minPathCostKey))
     fileMinCost.close()
     optimalPathCost = 0
@@ -217,9 +218,11 @@ def pathCost(gNode, sNode, g, index):
     goalStatePath[cost] = finishedList #add to the dictionary, key: cost, value: finishedList
 
 def main():
+    inputFileName = sys.argv[0]
+    optimalPathFilename = sys.argv[1]
+    exploredListFilename = sys.argv[2] 
 
-    inputFileName = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment1/Example1/input.csv", delimiter=",", dtype="str")
-    pathfinding(inputFileName, "optimalPathFilename", "exploredListFilename")
+    pathfinding(inputFileName, optimalPathFilename, exploredListFilename)
 
     return
 
