@@ -218,10 +218,8 @@ def pathCost(gNode, sNode, g, index):
 
 def main():
 
-    inputFileName = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment1/Example2/input.csv", delimiter=",", dtype="str")
-    exploredListFilename = open("filePathCost.txt", "w")
-    optimalPathFilename = open("fileMinCost.txt", "w")
-    pathfinding(inputFileName, optimalPathFilename, exploredListFilename)
+    inputFileName = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment1/Example1/input.csv", delimiter=",", dtype="str")
+    pathfinding(inputFileName, "optimalPathFilename", "exploredListFilename")
 
     return
 
