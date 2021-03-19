@@ -112,10 +112,11 @@ class Graph:
 def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
     #Import CSV
     
-    inputFileName = np.char.strip(inputFileName)
+    csv = np.genfromtxt(inputFileName, delimiter=",", dtype="str")
+    csv = np.char.strip(csv)
 
-    print(inputFileName)
-    g = Graph(inputFileName)  #Create Graph and Link nodes
+    print(csv)
+    g = Graph(csv)  #Create Graph and Link nodes
 
     pq = PriorityQueue()
 
