@@ -111,11 +111,11 @@ class Graph:
 # exploredListFilename is the name of the file the list of explored nodes should be written to
 def pathfinding(inputFileName, optimalPathFilename, exploredListFilename):
     #Import CSV
-    csv = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment1/Example2/input.csv", delimiter=",", dtype="str")
-    csv = np.char.strip(csv)
+    
+    inputFileName = np.char.strip(inputFileName)
 
-    print(csv)
-    g = Graph(csv)  #Create Graph and Link nodes
+    print(inputFileName)
+    g = Graph(inputFileName)  #Create Graph and Link nodes
 
     pq = PriorityQueue()
 
@@ -217,7 +217,11 @@ def pathCost(gNode, sNode, g, index):
     goalStatePath[cost] = finishedList #add to the dictionary, key: cost, value: finishedList
 
 def main():
-    cost = pathfinding("a", "a", "a")
+
+    inputFileName = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment1/Example2/input.csv", delimiter=",", dtype="str")
+    exploredListFilename = open("filePathCost.txt", "w")
+    optimalPathFilename = open("fileMinCost.txt", "w")
+    pathfinding(inputFileName, optimalPathFilename, exploredListFilename)
 
     return
 
