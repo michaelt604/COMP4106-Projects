@@ -37,7 +37,8 @@ pygame.display.set_caption('Pong')
 # if right is True, spawn to the right, else spawn to the left
 class Ball: 
 	#initialize balls in the center
-	def __init__(self,right):	
+	def __init__(self,right,id):
+		self.id = id	
 		self.ball_pos = [WIDTH/2,HEIGHT/2] # center of screen
 		horz = random.randrange(2,4)
 		vert = random.randrange(1,3)
@@ -74,10 +75,10 @@ def init():
    #initilize list of balls
     if random.randrange(0,2) == 0:
         for x in range(total_balls):
-			balls.append(Ball(True))
+			balls.append(Ball(True,x))
     else:
         for x in range(total_balls):
-			balls.append(Ball(False))
+			balls.append(Ball(False,x))
 
 
 #draw function of canvas
