@@ -39,14 +39,14 @@ class Ball:
 	#initialize balls in the center
 	def __init__(self,right,id):
 		self.id = id	
-		self.ball_pos = [random.randrange(0,WIDTH),random.randrange(0,HEIGHT)] # center of screen
+		self.ball_pos = [random.randrange(200,400),random.randrange(50,HEIGHT-50)] # start in a range of the center
 		horz = random.randrange(2,4)
 		vert = random.randrange(1,3)
 		self.colour =  [random.randrange(1,254), random.randrange(1,254), random.randrange(1,254)]  # different colour for each ball
-		if right == False:  
-			horz = - horz   # shoot ball left if variable is false
+		if right == False:  #start ball shoooiing left or right 
+			horz = - horz   
 			
-		self.ball_vel = [horz,-vert]  # ball starts shooting downward
+		self.ball_vel = [horz,-vert]  
 
 
 # define event handlers
@@ -57,7 +57,7 @@ def init():
     paddle2_pos = [round(WIDTH +1 - HALF_PAD_WIDTH), round(HEIGHT/2)]
     l_score = 0
     r_score = 0
-    total_balls = 2   #<<<<<<<<<<<<<<  HOW YOU CHNAGE TOTAL NUMBER OF BALLS 
+    total_balls = 5   #<<<<<<<<<<<<<<  HOW YOU CHNAGE TOTAL NUMBER OF BALLS 
     balls = []
     ball_num = total_balls
    
@@ -100,7 +100,7 @@ def draw(canvas):
         pongBall.ball_pos[0] += round(pongBall.ball_vel[0])
         pongBall.ball_pos[1] += round(pongBall.ball_vel[1])
 
-    #draw paddles and ball
+    #draw paddles and balls
     for pongball in balls: 
         pygame.draw.circle(canvas, pongball.colour, pongball.ball_pos, 20, 0)
     pygame.draw.polygon(canvas, GREEN, [[paddle1_pos[0] - HALF_PAD_WIDTH, paddle1_pos[1] - HALF_PAD_HEIGHT], [paddle1_pos[0] - HALF_PAD_WIDTH, paddle1_pos[1] + HALF_PAD_HEIGHT], [paddle1_pos[0] + HALF_PAD_WIDTH, paddle1_pos[1] + HALF_PAD_HEIGHT], [paddle1_pos[0] + HALF_PAD_WIDTH, paddle1_pos[1] - HALF_PAD_HEIGHT]], 0)
