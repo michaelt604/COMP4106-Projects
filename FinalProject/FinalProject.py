@@ -63,10 +63,8 @@ class Ball:
             tempPos[0] += round(tempVel[0])
             tempPos[1] += round(tempVel[1])
 
-            if round(tempPos[1]) <= BALL_RADIUS:    #If we hit the roof, flip the vertical velocity
+            if (round(tempPos[1]) <= BALL_RADIUS) or (round(tempPos[1]) >= HEIGHT + 1 - BALL_RADIUS):    #If we hit the roof, flip the vertical velocity
                 tempVel[1] *= -1    
-            if round(tempPos[1]) >= HEIGHT + 1 - BALL_RADIUS:   #If we hit the roof, flip the vertical velocity
-                tempVel[1] *= -1
 
             if (round(tempPos[0]) <= BALL_RADIUS + PAD_WIDTH) or (round(tempPos[0]) >= WIDTH + 1 - BALL_RADIUS - PAD_WIDTH):    # Ball hits the left or right side
                 self.final_pos = [tempPos[0], tempPos[1]]
@@ -142,34 +140,30 @@ def draw(canvas):
     # ball collison check on gutters or paddles
     r_goal = False
     for pongball in balls:
-        if round(pongball.ball_pos[0]) <= BALL_RADIUS + PAD_WIDTH and round(pongball.ball_pos[1]) in range(paddle1_pos[1] - HALF_PAD_HEIGHT, paddle1_pos[1] + HALF_PAD_HEIGHT, 1):
+        leftSide = round(pongball.ball_pos[0]) <= BALL_RADIUS + PAD_WIDTH and round(pongball.ball_pos[1]) in range(paddle1_pos[1] - HALF_PAD_HEIGHT, paddle1_pos[1] + HALF_PAD_HEIGHT, 1)
+        rightSide = round(pongball.ball_pos[0]) >= WIDTH + 1 - BALL_RADIUS - PAD_WIDTH and round(pongball.ball_pos[1]) in range(paddle2_pos[1] - HALF_PAD_HEIGHT, paddle2_pos[1] + HALF_PAD_HEIGHT, 1)
+
+        score = False
+        if (leftSide or rightSide):
             pongball.ball_vel[0] = -pongball.ball_vel[0]
             pongball.ball_vel[0] *= 1.1
             pongball.ball_vel[1] *= 1.1
             pongball.bouncePosition()
 
-        elif round(pongball.ball_pos[0]) <= BALL_RADIUS + PAD_WIDTH:
-            # when scored on left side, increase score remove ball from list of balls
-            r_score += 1
+        elif round(pongball.ball_pos[0]) <= BALL_RADIUS + PAD_WIDTH:    # when scored on left side, increase score remove ball from list of balls        
+            score = True
+            r_score += 1                
+        
+        elif round(pongball.ball_pos[0]) >= WIDTH + 1 - BALL_RADIUS - PAD_WIDTH:    # when scored on right side, increase score remove ball from list of balls          
+            score = True
+            l_score += 1
+
+        if (score):
             ball_num -= 1
             r_goal = True
             balls.remove(pongball)
             print(f"FinalPos: {pongball.ball_pos}, CalcFinalPos: {pongball.final_pos}")
 
-    for pongball in balls:
-        if round(pongball.ball_pos[0]) >= WIDTH + 1 - BALL_RADIUS - PAD_WIDTH and round(pongball.ball_pos[1]) in range(paddle2_pos[1] - HALF_PAD_HEIGHT, paddle2_pos[1] + HALF_PAD_HEIGHT, 1):
-            pongball.ball_vel[0] = -pongball.ball_vel[0]
-            pongball.ball_vel[0] *= 1.1
-            pongball.ball_vel[1] *= 1.1
-            pongball.bouncePosition()
-
-        elif round(pongball.ball_pos[0]) >= WIDTH + 1 - BALL_RADIUS - PAD_WIDTH:
-            # when scored on right side, increase score remove ball from list of balls
-            l_score += 1
-            ball_num -= 1
-            r_goal = False
-            balls.remove(pongball)
-            print(f"FinalPos: {pongball.ball_pos}, CalcFinalPos: {pongball.final_pos}")
 
     # If no more balls in play, reset game by remaking total number of balls
     if ball_num == 0:
