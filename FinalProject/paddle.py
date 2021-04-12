@@ -23,7 +23,7 @@ SCREEN_HEIGHT = 500
 paddle_SIZE = 25
 
 
-class Paddle:
+class Paddle1:
     """
     Class to keep track of a ball's location and vector.
     """
@@ -34,22 +34,51 @@ class Paddle:
         self.change_y = 0
 
  
-def make_paddle():
-    """
-    Function to make a new, random ball.
-    """
-    paddle = Paddle()
-    # Starting position of the paddle.
-    # Take into account the ball size so we don't spawn on the edge.
-    paddle.x = 0
-    paddle.y = random.randrange(paddle_SIZE, SCREEN_HEIGHT - paddle_SIZE)
-    #paddle.y = 0
-    # Speed and direction of paddle 
-    paddle.change_x = random.randrange(0, 3)
-    paddle.change_y = random.randrange(0, 3)
+    def make_paddle():
+        """
+        Function to make a new, random ball.
+        """
+        paddle = Paddle1()
+        # Starting position of the paddle.
+        # Take into account the ball size so we don't spawn on the edge.
+        paddle.x = 0 #x coordinate where the ball will be
+        paddle.y = 100 #where the y will be for the ball coordinates
+        #paddle.y = 0
+
+        # Speed and direction of paddle 
+        paddle.change_x = random.randrange(1, 3)
+        paddle.change_y = random.randrange(1, 3)
+    
+        return paddle
  
-    return paddle
+
+class Paddle2:
+    """
+    Class to keep track of a ball's location and vector.
+    """
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+        self.change_x = 0
+        self.change_y = 0
+
  
+    def make_paddle():
+        """
+        Function to make a new, random ball.
+        """
+        paddle = Paddle2()
+        # Starting position of the paddle.
+        # Take into account the ball size so we don't spawn on the edge.
+        paddle.x = 0 #x coordinate where the ball will be
+        paddle.y = 0 #where the y will be for the ball coordinates
+        #paddle.y = 0
+
+        # Speed and direction of paddle 
+        paddle.change_x = random.randrange(1, 3)
+        paddle.change_y = random.randrange(1, 3)
+    
+        return paddle
  
 def main():
     """
@@ -68,11 +97,9 @@ def main():
  
     # Used to manage how fast the screen updates
     clock = pygame.time.Clock()
- 
-    paddle_list = []
-    paddle = make_paddle()
-    paddle_list.append(paddle)
- 
+    
+    paddle1 = Paddle1.make_paddle() #calls the make paddle function for the x and y's
+    paddle2 = Paddle2.make_paddle() 
     # -------- Main Program Loop -----------
     while not done:
         # --- Event Processing
@@ -88,16 +115,23 @@ def main():
         # --- Logic
         #for paddle in paddle_list:
             # Move the paddle's center
-        paddle.x += paddle.change_x
-        paddle.y += paddle.change_y
+        paddle1.x += paddle1.change_x
+        paddle1.y += paddle1.change_y
+
+        paddle2.x += paddle2.change_x
+        paddle2.y += paddle2.change_y
 
         # Bounce the paddle if needed
-        if paddle.y > SCREEN_HEIGHT - paddle_SIZE or paddle.y < paddle_SIZE:
-            paddle.change_y *= -1
-        if paddle.x > SCREEN_WIDTH - paddle_SIZE or paddle.x < paddle_SIZE:
-            paddle.change_x *= -1
- 
+        if paddle1.y > SCREEN_HEIGHT - 60 or paddle1.y < 0:
+            paddle1.change_y *= -1
+        if paddle1.x > SCREEN_WIDTH  - 30 or paddle1.x < 30:
+            paddle1.change_x *= -1
 
+        if paddle2.y > SCREEN_HEIGHT - 60 or paddle2.y < 0:
+            paddle2.change_y *= -1
+        if paddle2.x > SCREEN_WIDTH  - 30 or paddle2.x < 30:
+            paddle2.change_x *= -1
+ 
         # --- Drawing
         # Set the screen background
         screen.fill(BLACK)
@@ -105,8 +139,8 @@ def main():
         # Draw the paddles
         #for paddle in paddle_list:
             #pygame.draw.circle(screen, WHITE, [paddle.x, paddle.y], paddle_SIZE)
-        pygame.draw.rect(screen, RED, pygame.Rect(paddle.x, paddle.y, 30, 60))
-        pygame.draw.rect(screen, RED, pygame.Rect(670, paddle.y, 30, 60))
+        pygame.draw.rect(screen, RED, pygame.Rect(paddle1.x, paddle1.y, 30, 60))
+        pygame.draw.rect(screen, RED, pygame.Rect(670, paddle2.y, 30, 60))
         # --- Wrap-up
         # Limit to 60 frames per second
         clock.tick(60)
