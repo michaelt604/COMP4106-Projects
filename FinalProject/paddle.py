@@ -46,8 +46,8 @@ class Paddle1:
         #paddle.y = 0
 
         # Speed and direction of paddle 
-        paddle.change_x = random.randrange(1, 3)
-        paddle.change_y = random.randrange(1, 3)
+        #paddle.change_x = random.randrange(1, 3)
+        paddle.change_y = 8
     
         return paddle
  

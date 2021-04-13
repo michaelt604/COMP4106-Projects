@@ -222,9 +222,9 @@ def main():
         #paddle1.y += paddle1.change_y
 
         if (balls[0].final_pos[1] > paddle2.y):
-            paddle2.y -= paddle2.change_y
-        elif (balls[0].final_pos[1] < paddle2.y):
             paddle2.y += paddle2.change_y
+        elif (balls[0].final_pos[1] < paddle2.y):
+            paddle2.y -= paddle2.change_y
 
         #paddle2.x += paddle2.change_x
         #paddle2.y += paddle2.change_y
