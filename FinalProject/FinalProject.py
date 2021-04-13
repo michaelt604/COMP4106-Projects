@@ -222,9 +222,9 @@ def main():
         #paddle1.y += paddle1.change_y
 
         if (balls[0].final_pos[1] > paddle2.y):
-            paddle2.y -= paddle2.change_y * 0.000001
+            paddle2.y -= paddle2.change_y
         elif (balls[0].final_pos[1] < paddle2.y):
-            paddle2.y += paddle2.change_y * 0.000001
+            paddle2.y += paddle2.change_y
 
         #paddle2.x += paddle2.change_x
         #paddle2.y += paddle2.change_y
@@ -236,6 +236,15 @@ def main():
             paddle1_pos[1] += paddle1_vel
         elif paddle1_pos[1] == SCREEN_HEIGHT - HALF_PAD_HEIGHT and paddle1_vel < 0:
             paddle1_pos[1] += paddle1_vel
+        
+        '''
+        if paddle2.x > HALF_PAD_HEIGHT and paddle1_pos[1] < SCREEN_HEIGHT - HALF_PAD_HEIGHT:
+            paddle2.x += paddle1_vel
+        elif paddle2.x == HALF_PAD_HEIGHT and paddle1_vel > 0:
+            paddle2.x += paddle1_vel
+        elif paddle2.x == SCREEN_HEIGHT - HALF_PAD_HEIGHT and paddle1_vel < 0:
+            paddle2.x += paddle1_vel
+        '''
         '''
         if paddle1.y > SCREEN_HEIGHT - PAD_HEIGHT or paddle1.y < 0:
             paddle1.change_y *= -1
@@ -243,10 +252,10 @@ def main():
             paddle1.change_x *= -1
         '''
 
-        if paddle2.y > SCREEN_HEIGHT - PAD_HEIGHT or paddle2.y < 0:
-            paddle2.change_y *= -1
-        if paddle2.x > SCREEN_WIDTH  - PAD_WIDTH or paddle2.x < PAD_WIDTH:
-            paddle2.change_x *= -1
+        #if paddle2.y > SCREEN_HEIGHT - PAD_HEIGHT or paddle2.y < 0:
+        #    paddle2.change_y *= -1
+        #if paddle2.x > SCREEN_WIDTH  - PAD_WIDTH or paddle2.x < PAD_WIDTH:
+        #    paddle2.change_x *= -1
  
         # --- Drawing
         # Set the screen background
