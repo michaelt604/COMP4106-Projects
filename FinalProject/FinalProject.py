@@ -64,7 +64,7 @@ class Paddle1:
         paddle.change_y = random.randrange(1, 3)
     
         return paddle
- 
+    
 
 class Paddle2:
     """
@@ -90,7 +90,6 @@ class Paddle2:
 
         # Speed and direction of paddle 
 
-        paddle.change_x = 2
         paddle.change_y = 2
     
         return paddle
@@ -222,8 +221,13 @@ def main():
         #paddle1.x += paddle1.change_x
         #paddle1.y += paddle1.change_y
 
-        paddle2.x += paddle2.change_x
-        paddle2.y += paddle2.change_y
+        if (balls[0].final_pos[1] > paddle2.y):
+            paddle2.y -= paddle2.change_y * 0.000001
+        elif (balls[0].final_pos[1] < paddle2.y):
+            paddle2.y += paddle2.change_y * 0.000001
+
+        #paddle2.x += paddle2.change_x
+        #paddle2.y += paddle2.change_y
 
         # Bounce the paddle if needed
         if paddle1_pos[1] > HALF_PAD_HEIGHT and paddle1_pos[1] < SCREEN_HEIGHT - HALF_PAD_HEIGHT:
