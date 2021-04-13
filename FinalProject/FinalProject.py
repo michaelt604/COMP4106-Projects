@@ -284,7 +284,7 @@ def main():
                 pongball.ball_vel[0] *= 1.1
                 pongball.ball_vel[1] *= 1.1
                 pongball.bouncePosition()
-                paddle2.y = pongball.final_pos[1]
+                #paddle2.y = pongball.final_pos[1]
 
             elif round(pongball.ball_pos[0]) <= BALL_RADIUS + PAD_WIDTH:    # when scored on left side, increase score remove ball from list of balls        
                 score = True
@@ -298,17 +298,18 @@ def main():
                 ball_num -= 1
                 r_goal = True
                 balls.remove(pongball)
-                paddle2.y = pongball.final_pos[1]
+                #paddle2.y = pongball.final_pos[1]
                 print(f"FinalPos: {pongball.ball_pos}, CalcFinalPos: {pongball.final_pos}")
             
             #after ball estimation this changes paddle 2's location
+            '''
             if paddle2.y > SCREEN_HEIGHT - PAD_HEIGHT or paddle2.y < 0:
                 paddle2.change_y *= -1
                 paddle2.y = pongball.final_pos[1]
     
             if paddle2.x > SCREEN_WIDTH  - PAD_WIDTH or paddle2.x < PAD_WIDTH:
                 paddle2.change_x *= -1
-
+            '''
         # If no more balls in play, reset game by remaking total number of balls
         if ball_num == 0:
             for x in range(total_balls):
