@@ -77,34 +77,34 @@ class Paddle:
                     bally = heapq.heappop(balls)                        # take top ball on list 
                     orderedBalls.append(bally)
                 
-                    reachBall = self.canGetToBall(orderedBalls[0], self.y)
-                    reachBall2 = False
+                reachBall1 = self.canGetToBall(orderedBalls[0], self.y)
+                reachBall2 = False
 
-                    target = orderedBalls[0][3].final_pos[1]
-                    #print(f"target default: {target}")
-                    
-                    if (len(orderedBalls) > 1 and not reachBall):   #If there are only two balls, and first ball isn't reachable, prioritise
+                target = orderedBalls[0][3].final_pos[1]
+                #print(f"target default: {target}")
+                
+                if (len(orderedBalls) > 1 and not reachBall1):   #If there are only two balls, and first ball isn't reachable, prioritise
+                    reachBall2 = self.canGetToBall(orderedBalls[1], self.y)
+                    if (reachBall2):    #Ball 2 is reachable but ball 1 isn't. We set ball2 as the target instead
+                        target = orderedBalls[1][3].final_pos[1]
+                        #print(f"target not default 2: {target}")          
+
+                if (len(orderedBalls) > 2 and reachBall1):  #If there are three or more balls, and first ball is reachable, but the next two are not
+                    reachBall2 = self.canGetToBall(orderedBalls[1], orderedBalls[0][3].final_pos[1])    #Time to get reachBall2 from ball1 position
+                    if (not reachBall2):    #We can't reach second ball after getting first ball
                         reachBall2 = self.canGetToBall(orderedBalls[1], self.y)
-                        if (reachBall2):    #Ball 2 is reachable but ball 1 isn't. We set ball2 as the target instead
-                            target = orderedBalls[1][3].final_pos[1]
-                            #print(f"target not default 2: {target}")          
-
-                    if (len(orderedBalls) > 2 and reachBall):  #If there are three or more balls, and first ball is reachable, but the next two are not
-                        reachBall2 = self.canGetToBall(orderedBalls[1], orderedBalls[0][3].final_pos[1])    #Time to get reachBall2 from ball1 position
-                        if (not reachBall2):    #We can't reach second ball after getting first ball
-                            reachBall2 = self.canGetToBall(orderedBalls[1], self.y)
-                            if (reachBall): #We can reach second ball from starting position
-                                reachBall3 = self.canGetToBall(orderedBalls[2], orderedBalls[1][3].final_pos[1])
-                                if (reachBall3):    #We can reach second and third ball from starting position, but not with first, then target second ball
-                                    target = orderedBalls[1][3].final_pos[1]
-                                    #print(f"target not default 3: {target}")
-                    
-                    if (abs(target - self.y) <= 8):  #If within distance of point, stop moving
-                        self.change_y = 0   
-                    elif (target > self.y):
-                        self.change_y = self.moveVel
-                    elif (target < self.y):
-                        self.change_y = -self.moveVel
+                        if (reachBall2): #We can reach second ball from starting position
+                            reachBall3 = self.canGetToBall(orderedBalls[2], orderedBalls[1][3].final_pos[1])
+                            if (reachBall3):    #We can reach second and third ball from starting position, but not with first, then target second ball
+                                target = orderedBalls[1][3].final_pos[1]
+                                #print(f"target not default 3: {target}")
+                
+                if (abs(target - self.y) <= 8):  #If within distance of point, stop moving
+                    self.change_y = 0   
+                elif (target > self.y):
+                    self.change_y = self.moveVel
+                elif (target < self.y):
+                    self.change_y = -self.moveVel
 
                     
         # Bounce the paddle if needed
@@ -131,23 +131,26 @@ class Paddle:
                 testPos -= self.moveVel
         ticks = pygame.time.get_ticks()
         timeToBall = ticks + totalIterations / averageFps * 1000  #Number of milliseconds    
-        returnVal = timeToBall < bally[0] + 20    #Can reach ball in time
+        returnVal = timeToBall < bally[0]    #Can reach ball in time
 
         #if (not returnVal): #Ball not reachable
-            #print(f"Ball {returnVal}: {timeToBall} < {bally[0] + 20}")
+            #print(f"Ball {returnVal}: {timeToBall} < {bally[0]}")
         return returnVal
 
 
 class Ball:
     # initialize balls in the center
     def __init__(self, right, id):
-        horz = random.randrange(2, 4)
+        horz = random.randrange(2, 5)
         vert = random.randrange(1, 3)
-        if (random.randint(0, 1)):  # start ball shoooiing left or right
+
+        dirr = random.randint(0, 1)
+        #print(dirr)
+        if (dirr):  # start ball shoooiing left or right
             horz = -horz
 
         self.id = id
-        self.ball_pos = [random.randrange(200, 400), random.randrange(50, SCREEN_HEIGHT-50)]  # start in a range of the center
+        self.ball_pos = [random.randrange(100, 500), random.randrange(50, SCREEN_HEIGHT-50)]  # start in a range of the center
         self.colour = [random.randrange(1, 254), random.randrange(1, 254), random.randrange(1, 254)]  # different colour for each ball
         self.ball_vel = [horz, -vert]
         self.final_pos = ""
@@ -216,12 +219,8 @@ def init():
     #Initialize the paddles
 
     # initilize list of balls
-    if random.randrange(0, 2) == 0:
-        for x in range(total_balls):
-            balls.append(Ball(True, x))
-    else:
-        for x in range(total_balls):
-            balls.append(Ball(False, x))
+    for x in range(total_balls):
+        balls.append(Ball(False, x))
 
 # keydown handler
 def keydown(event):
@@ -267,8 +266,8 @@ def main():
     # Used to manage how fast the screen updates
     clock = pygame.time.Clock()
     
-    paddles.append(Paddle(1, GREEN, round(HALF_PAD_WIDTH - 1), round(SCREEN_HEIGHT/2), "AI1"))      #Paddle 1
-    paddles.append(Paddle(2, RED, round(SCREEN_WIDTH + 1 - HALF_PAD_WIDTH), round(SCREEN_HEIGHT/2), "AI2"))    #Paddle 2
+    paddles.append(Paddle(1, GREEN, round(HALF_PAD_WIDTH - 1), round(SCREEN_HEIGHT/2), "AI2"))      #Paddle 1
+    paddles.append(Paddle(2, RED, round(SCREEN_WIDTH + 1 - HALF_PAD_WIDTH), round(SCREEN_HEIGHT/2), "AI1"))    #Paddle 2
 
     def prioList(side, ballsPlaying):  # pritority list for balls
         priotemp=[]
@@ -346,7 +345,7 @@ def main():
                 pongball.ball_vel[1] *= 1.1
                 #pongball.bouncePosition()
                 #pongball.timeOfArrival()
-                print(f"Time of Arrival: {round(pygame.time.get_ticks())}")
+                #print(f"Time of Arrival: {round(pygame.time.get_ticks())}")
 
             elif round(pongball.ball_pos[0]) <= BALL_RADIUS + PAD_WIDTH:    # when scored on left side, increase score remove ball from list of balls        
                 score = True
