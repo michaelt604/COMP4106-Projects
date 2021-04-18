@@ -1,5 +1,5 @@
 import numpy as np
-import pandas as pd
+#import pandas as pd
 import csv
 import math
 import sys
@@ -9,7 +9,7 @@ from io import StringIO
 # Nested dictionary 
     #key is the stat ( 201101). value of that state is another value ( key is an action U,D, value is Q value with that )
 '''
-#qvalues={}
+qvalues={}
 
 class td_qlearning:
     alpha = 0.1
@@ -17,20 +17,56 @@ class td_qlearning:
     #global qvalues # nested dictionary
 
     def __init__(self, trajectory_filepath):    # trajectory_filepath is the path to a file containing a trajectory through state space
-        #global qvalues # nested dictionary
-        
+        global qvalues # nested dictionary
+        qvalues = {}
+        alpha = 0.1
+        gamma = 0.5
         # SUDO CODE 
         '''
         Create a series, index= state, values = actions
         
-        Loop through series ( trajetories )
-            If state exists in qvalues 
-                
-
+        Loop through  trajetories :
+            If state exists in states 
+                if action extists actions & action is possible in that square 
+                    call q function ( state and ation ) and add q value to list( state-action pair)
+                if action doesnt exist
+                    Add action too action state pair
+            else: # state doesn't exsit in dictionary
+                qvalues['state']= {}
+                if action is possible in state
+                    qvalues['state'][action]= q value calculation
         '''
+        self.csvInput = np.genfromtxt(trajectory_filepath, delimiter=",", dtype="str")  #Input as string so string operations can be performed
+        self.prevValue = 0
+        self.nextPair = {}
+        
+        for i in range(len(self.csvInput)): # loop through trajectories
+            state = self.csvInput[i][0]
+           # location = self.csvInput[i][0][:1]
+           # states = self.csvInput[i][0][1:]
+            action = self.csvInput[i][1]
+            print(qvalues)
+           # qv = qvalue(state,action) + alpha*(rewardAt(state) + gamma*maxAllActions(csvInput[i+1][0]) - qvalue(state,action))
+            qv=0.0
+            if i < (len(self.csvInput) - 1):
+                if state in  qvalues.keys():
+                    if action in qvalues[state].keys() and self.actionPossible(state, action): # if state and actions already exsists 
+                            qv = self.qvalue(state,action) + alpha*(self.rewardAt(state) + gamma*self.maxAllActions(self.csvInput[i+1][0]) - self.qvalue(state,action))  # calculate Q value
+                            self.qValueSetter(state,action,qv)  # add them to exsiting list
+                            
+                    elif self.actionPossible(state, action):  # state exsits but action doesn't 
+                            qv = self.qvalue(state,action) + alpha*(self.rewardAt(state) + gamma*self.maxAllActions(self.csvInput[i+1][0]) - self.qvalue(state,action))  # calculate Q value
+                            qvalues[state][action] = [qv]
+                else: # state not in qvalues
+                    qvalues[state] = {}
+                    if self.actionPossible(state,action):
+                        qv = self.qvalue(state,action) + alpha*(self.rewardAt(state) + gamma*self.maxAllActions(self.csvInput[i+1][0]) - self.qvalue(state,action))  # calculate Q value
+                        qvalues[state][action] = [qv]
+                
+            
 
        # notes
-       ''' 
+    ''' 
        # calculate q function here 
         # hold double list holdinig state- action pairs and their Q values
 
@@ -55,12 +91,12 @@ class td_qlearning:
 
 
         # use a libary that formats everything when looping
-'''
+    '''
     
     
     
     # OLD CODE
-        '''
+    '''
         self.csvInput = np.genfromtxt(trajectory_filepath, delimiter=",", dtype="str")  #Input as string so string operations can be performed
         self.prevValue = 0
         self.nextPair = {}
@@ -81,37 +117,21 @@ class td_qlearning:
             self.nextPair[pair] = pair2
 
             # trajecoties update in init
-'''
-        return
+
+            return
+    '''
+        
 
     def qvalue(self, state, action):     #this is a getter
-        #Sudo code
-        # if action in state action pair, get max, 
-        # else return 0( default)
-        '''
-        if action in qvalues[state]:
+        if state in qvalues.keys() and action in qvalues[state].keys():
             return max(qvalues[state][action])
         else:
             return 0
-        ''' 
-
-
-        # old code
-        '''
-        nextPair = self.nextPair[(state, action)]
-
-        location = state[:1]
-        states = state[1:]
         
-        rCurState = self.rewardAt(states) #reward = -1 * Number of dirty squres            
-        futureReward = self.maxFuture(nextPair[0])    #Compares cleaning to moving in the future
 
-        newValue = self.prevValue + self.alpha * (rCurState + self.gamma * futureReward - self.prevValue)
-        #prevValue = newValue
-        print(f"Pair = {(state, action)}, Q={newValue}")
-        '''
-        return qvalue    # Return the q-value for the state-action pair
 
+        
+        
     def policy(self, state):    # state is a string representation of a state
         # Examines all the actions for that state, returns maxmim Q value for a the state action pair ( dependent on Q value)
         
@@ -120,10 +140,48 @@ class td_qlearning:
         
     def rewardAt(self, state):  #Returns the reward at a given state
         reward = 0
-        for s in state:
+        for s in state[1:]:
             reward += int(s)        
         return -reward
     
+    def qValueSetter(self, state, action, qval):  #add new q value to list for that action. not sure if implementation right
+        qvalues[state][action].append(qval)
+        return 
+
+    def maxAllActions(self, state):
+        highest= 0.0
+        if state in qvalues.keys(): 
+            for actionss in qvalues[state]:  # for actions in  in this states qvalues 
+                highestAct= max(qvalues[state][actionss])
+                if highestAct > highest:
+                    highest = highestAct
+        
+                
+        return highest
+
+
+    def actionPossible(self,state, action):
+        possible = False
+        square = int(state[0])
+        if square == 1:
+            if action == "D" or action == "C":
+                possible = True
+        elif square == 2:
+            if action == "R" or action == "C":
+                possible = True
+        elif square == 4:
+            if action == "L" or action == "C":
+                possible = True
+        elif square == 5:
+            if action == "U" or action == "C":
+                possible = True
+        elif square == 3:
+            if action == "R" or action == "C" or action == "L" or action == "D" or action == "U" :
+                possible = True
+        else:
+            print("not valid action")
+        return possible
+
     
     def maxFuture(self, state): #Returns the maximum of potential future options
         location = int(state[:1])
