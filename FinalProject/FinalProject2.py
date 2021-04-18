@@ -83,13 +83,11 @@ class Paddle:
                 reachBall2 = False
 
                 target = orderedBalls[0][3].final_pos[1]
-                #print(f"target default: {target}")
                 
                 if (len(orderedBalls) > 1 and not reachBall1):   #If there are only two balls, and first ball isn't reachable, prioritise
                     reachBall2 = self.canGetToBall(orderedBalls[1], self.y)
                     if (reachBall2):    #Ball 2 is reachable but ball 1 isn't. We set ball2 as the target instead
                         target = orderedBalls[1][3].final_pos[1]
-                        #print(f"target not default 2: {target}")          
 
                 if (len(orderedBalls) > 2 and reachBall1):  #If there are three or more balls, and first ball is reachable, but the next two are not
                     reachBall2 = self.canGetToBall(orderedBalls[1], orderedBalls[0][3].final_pos[1])    #Time to get reachBall2 from ball1 position
@@ -99,7 +97,6 @@ class Paddle:
                             reachBall3 = self.canGetToBall(orderedBalls[2], orderedBalls[1][3].final_pos[1])
                             if (reachBall3):    #We can reach second and third ball from starting position, but not with first, then target second ball
                                 target = orderedBalls[1][3].final_pos[1]
-                                #print(f"target not default 3: {target}")
                 
                 if (abs(target - self.y) <= 8):  #If within distance of point, stop moving
                     self.change_y = 0   
@@ -135,8 +132,6 @@ class Paddle:
         timeToBall = ticks + totalIterations / averageFps * 1000  #Number of milliseconds    
         returnVal = timeToBall < bally[0]    #Can reach ball in time
 
-        #if (not returnVal): #Ball not reachable
-            #print(f"Ball {returnVal}: {timeToBall} < {bally[0]}")
         return returnVal
 
 
@@ -147,7 +142,7 @@ class Ball:
         vert = random.randrange(1, 3)
 
         dirr = random.randint(0, 1)
-        #print(dirr)
+
         if (dirr):  # start ball shoooiing left or right
             horz = -horz
 
@@ -196,7 +191,6 @@ class Ball:
             self.arrivalT = [bounceTime, "R"]
         else:
             self.arrivalT = [bounceTime, "L"]
-        #print(f"Estimated Arrival Time: {round(self.arrivalT[0])}")
 
 # define event handlers
 def init():
@@ -261,7 +255,6 @@ def main():
         priotemp=[]
         for pongballs in ballsPlaying:
             if pongballs.arrivalT[1] == side:
-                #heapq.heappush(priotemp,(pongballs.arrivalT[0]-pygame.time.get_ticks(),pongballs.ball_vel[0],pongballs.id, pongballs))
                 heapq.heappush(priotemp, (pongballs.arrivalT[0], pongballs.ball_vel[0], pongballs.id, pongballs))
 
         return priotemp
@@ -328,7 +321,6 @@ def main():
                 pongball.ball_vel[0] = -pongball.ball_vel[0]
                 pongball.ball_vel[0] *= 1.1
                 pongball.ball_vel[1] *= 1.1
-                #print(f"Time of Arrival: {round(pygame.time.get_ticks())}")
 
             elif round(pongball.ball_pos[0]) <= BALL_RADIUS + PAD_WIDTH:    # when scored on left side, increase score remove ball from list of balls        
                 score = True
@@ -342,12 +334,9 @@ def main():
                 ball_num -= 1
                 r_goal = True
                 balls.remove(pongball)
-                #print(f"FinalPos: {pongball.ball_pos}, CalcFinalPos: {pongball.final_pos}")
             
             pongball.bouncePosition()   #Recalculate every frame
 
-            
- 
         # If no more balls in play, reset game by remaking total number of balls
         if ball_num == 0:
             ball_num = 0
