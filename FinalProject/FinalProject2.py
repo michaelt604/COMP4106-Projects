@@ -1,12 +1,9 @@
 """
- This example shows having multiple balls bouncing around the screen at the
- same time. You can hit the space bar to spawn more balls.
  
- Sample Python/Pygame Programs
- Simpson College Computer Science
- http://programarcadegames.com/
- http://simpson.edu/computer-science/
- Based paddle on this
+ Source code reference for base code:
+ https://gist.github.com/CLRW97/74e2407ad65d2d29f6cf2fceb1f3031a
+
+
 """
 import heapq
 import pygame
