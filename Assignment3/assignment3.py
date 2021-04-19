@@ -43,8 +43,6 @@ class td_qlearning:
         
         for i in range(len(self.csvInput)): # loop through trajectories
             state = self.csvInput[i][0]
-           # location = self.csvInput[i][0][:1]
-           # states = self.csvInput[i][0][1:]
             action = self.csvInput[i][1]
             print(qvalues)
            # qv = qvalue(state,action) + alpha*(rewardAt(state) + gamma*maxAllActions(csvInput[i+1][0]) - qvalue(state,action))
@@ -59,7 +57,7 @@ class td_qlearning:
                             qv = self.qvalue(state,action) + alpha*(self.rewardAt(state) + gamma*self.maxAllActions(self.csvInput[i+1][0]) - self.qvalue(state,action))  # calculate Q value
                             qvalues[state][action] = [qv]
                 else: # state not in exist already
-                    qvalues[state] = {}
+                    qvalues[state] = {}   
                     for acts in allActions:             
                         if self.actionPossible(state,acts):     # make all relevant actions that is possible in that squre
                             qvalues[state][acts] = [0.0]
@@ -67,6 +65,7 @@ class td_qlearning:
                             qv = self.qvalue(state,action) + alpha*(self.rewardAt(state) + gamma*self.maxAllActions(self.csvInput[i+1][0]) - self.qvalue(state,action))  # calculate Q value
                             qvalues[state][action] = [qv]
         
+        '''
         p= self.policy("201011")
         print(p)
         g = self.qvalue("300000", "C")
@@ -83,7 +82,7 @@ class td_qlearning:
         print ("expected 'C' got :" + str(O))
         J = self.policy("510100")
         print ("expected 'U' got :" + str(J))
-
+        '''
 
 
 
@@ -131,7 +130,7 @@ class td_qlearning:
         
         
     def policy(self, state):    # state is a string representation of a state
-        # Examines all the actions for that state, returns maxmim Q value for a the state action pair ( dependent on Q value)
+        # Examines all the actions for that state, returns action with highest q value for a the state action pair ( dependent on Q value)
         a = ""
         hq=-999  # highest Q value
         for actionss in qvalues[state]:  # for actions in  in this states qvalues 
@@ -188,18 +187,11 @@ class td_qlearning:
         return possible
 
     
-    def maxFuture(self, state): #Returns the maximum of potential future options
-        location = int(state[:1])
-        states = state[1:]
-        m1 = self.rewardAt(states)   #Move and don't clean
-        m2 = self.rewardAt(f"{states[:location-1]}0{states[location:]}")   #Replace character at location with cleaned state 0
-
-        return max(m1, m2)
-
+   
 
 def main():
 
-    tdQLearn = td_qlearning("Assignment3/Example2/trajectory.csv")
+    tdQLearn = td_qlearning("Assignment3/Example1/trajectory.csv")
     #Input parsing and santizing
     #txtInput = np.genfromtxt("/Users/margievenes/Desktop/COMP 4106/A1/COMP4106-Projects/Assignment2/Example2/input.txt", delimiter=",", dtype="str")  #Input as string so string operations can be performed
     #txtInput = np.char.strip(txtInput)              #Remove whitespace
